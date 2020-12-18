@@ -1,0 +1,99 @@
+<html>
+    <head>
+        <title>Predicting Power Output</title>
+
+        <!-- Adapted from lecture - https://github.com/andrewbeattycourseware/dataRepresenation2020/blob/master/code/week09-server1linktoDB.py/bookviewer.html -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+       
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+    </head>
+
+    <style>
+
+        body {
+            background-image: url("https://images.pexels.com/photos/19670/pexels-photo.jpg?cs=srgb&dl=pexels-miguel-%C3%A1-padri%C3%B1%C3%A1n-19670.jpg&fm=jpg");
+        }
+        
+        
+    </style>
+
+
+    <body> 
+    
+        <br>
+    
+    <center>
+        <!-- Header for index.html page -->
+        <h1 style = "font-family:georgia,garamond,serif;font-size:52px;">  Predicting Power Output </h1>
+
+    
+        <!-- Create button that the user can click to create a new whiskey to the table, when clicked the showcreate function will be called and the create form displayed-->
+        <div> 
+            <br><br><br>
+            <label for="windspeed">Enter the wind speed in Mph (1-24):</label> <!-- Only allow values between 1 and 24, as this is where the model is accurate-->
+            <br>
+            <form id="form"> <!--https://stackoverflow.com/questions/18157411/how-would-i-store-the-number-in-an-html-form-input-as-a-javascript-variable-when -->
+                <input type="text" min="1" max="24" name="number" />
+                <input type="submit" value="Click to predict the power output using Gradient Boosting Model">
+            </form> <!-- Each time the value changes it is saved as a variable to be used for prediction power output-->
+            <br><br><br>
+                <div class="row">
+                  <div class="col-sm">
+                    <button type="button" class="btn btn-success" id="grad-button">Click to predict the power output using Gradient Boosting Model</button>
+                    <br><br>
+                    <button type="button" class="btn btn-success" id="randfor-button">Click to predict the power output using Random Forest Model</button>
+                  </div>
+                </div>
+              </div>                  
+            <br>
+              <div class="col-sm">
+                <input class="form-control" id="outputp" type="text" placeholder="Power output will appear here...." readonly>
+              </div>
+              <br><br><br><br><br><br><br><br><br><br>
+              <h2><button id="Changepage" onclick="location.href='index.html';"<button type="button" class="btn btn-secondary">Switch to predict power output using random values</button></h2>
+        </div>
+
+    </center>
+    </body>
+    <script> 
+        $("#grad-button").click(function(e) {
+            e.preventDefault();
+            $.getJSON("/api/grad", function(data) {
+                $('#outputp').val(data.value);
+            });
+        });
+        $("#randfor-button").click(function(e) {
+            e.preventDefault();
+            $.getJSON("/api/randfor", function(data) {
+                $('#outputp').val(number);
+            });
+        });
+        $("#uniform-button").click(function(e) {
+            e.preventDefault();
+            $.getJSON("/api/uniform", function(data) {
+                $('#output').val(data.value);
+            });
+        });
+
+
+
+        var number = 0;
+        var $form = $("#form");
+        var $input = $form.find("input[name=number]");
+
+        $form.submit(function(e){
+
+        e.preventDefault();
+
+        number = +($input.val()); 
+
+        /* 
+            takes value from input when the form is submitted. 
+            This will work even when you hit "enter" on your keyboard.
+            https://stackoverflow.com/questions/18157411/how-would-i-store-the-number-in-an-html-form-input-as-a-javascript-variable-when
+        */
+
+    });
+    </script>
+</html>
