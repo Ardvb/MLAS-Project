@@ -1,29 +1,31 @@
+# pylint: disable=no-member  
+# Above statement is just to disable an error message
+
+
 import pandas as pd   
 import numpy as np
 from sklearn.ensemble import GradientBoostingRegressor
+import json
 
 # To split dataset into train and test parts
-from sklearn.model_selection import train_test_split
+# from sklearn.model_selection import train_test_split
 
 windpower = pd.read_csv('https://raw.githubusercontent.com/ianmcloughlin/2020A-machstat-project/master/dataset/powerproduction.csv')
 
 windpowernew = windpower.drop(windpower[(windpower["speed"]> 10) & (windpower["power"]==0)].index)
 
 
+class GradModel:
+    def gbmodel(windspeed): 
+      x = windpowernew.speed.values.reshape(-1,1) # Reshape to values between -1 and 1 so we can use regression analysis
+      y = windpowernew["power"]
+      modelgb = GradientBoostingRegressor()
+      modelgb.fit(x,y)
+      windspeed = np.array((windspeed).split(), dtype='float') # windspeed wordt door html button ingevoerd. # Split the input string into a list. Then convert the list into a numpy array.
+      # Adapted from https://stackoverflow.com/questions/61246741/how-to-take-user-input-from-a-single-line-in-numpy-array
 
-
-
-def gbrmodel():
-  x = windpowernew.speed.values.reshape(-1,1) # Reshape to values between -1 and 1 so we can use regression analysis later
-  y = windpowernew["power"]
-
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0) # Using random state to make test reproducible.
-
-  modelgbr = GradientBoostingRegressor(random_state=0).fit(x_train, y_train)
-  modelgbr.score(x_test, y_test)
-  rdinp = np.array(np.random.uniform(low=1.0, high=24.0)) # Generate a random number between 1 and 24, representing the wind speed. Between those values our model works most accurately.
-  rdinprs = rdinp.reshape(-1,1) # Reshape the array to fit the model
-  prediction = modelgbr.predict(rdinprs)
-  return {"value": prediction}
-
-
+      windspeedrs = windspeed.reshape(-1,1) # Reshape the array to fit the model
+      power_output = modelgb.predict(np.array(windspeedrs))
+      powerlist = power_output.tolist() # Turn array into list so it can be read into html file # Adapted from https://www.kite.com/python/answers/how-to-serialize-a-numpy-array-into-json-in-python
+      powerjson = json.dumps(powerlist)
+      return{"value": powerjson}
