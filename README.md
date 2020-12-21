@@ -13,8 +13,8 @@
 2. Click the clone or download button.
 3. Save the repository to your device.
 4. Install [Docker](https://www.docker.com/products/docker-desktop) to create image
-5. Go to the folder where the files are downloaded and type: "docker build -t MLAS-Project".
-6. After the Docker image has been created, type "docker run == name MLAS-container -d -p 5000:5000 MLAS-project".
+5. Go to the folder where the files are downloaded and type: "docker build -t mlas-project".
+6. After the Docker image has been created, type "docker run == name mlas-container -d -p 5000:5000 mlas-project".
 7. The HTML page can now be accessed at: http://127.0.0.1:5000/
 
 ## Contents of this repository
